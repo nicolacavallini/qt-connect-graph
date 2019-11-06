@@ -59,7 +59,6 @@ def unpack_signals_and_slots(conncetion_dic):
     signal_to_slot_list = []
 
     for f,cl in conncetion_dic.items():
-        print(f)
         for c in cl:
             c = c.split(',')
             if (len(c)==4):
@@ -85,6 +84,7 @@ def plot_cluster(digraph,signal_dic):
         cluster_name = "cluster_"+str(obj)
         for m in methods:
             with digraph.subgraph(name=cluster_name) as c:
+                c.attr(style='filled', color='lightgrey')
                 signal_name=obj+"_"+m
                 signals.append(signal_name)
                 c.node(signal_name,signal_name)
@@ -106,25 +106,19 @@ if __name__ == "__main__":
     for sf in source_files:
         connnection_list_from_file(sf,conncetion_dic)
 
-
     signal_dic, slot_dic, signal_to_slot_list = unpack_signals_and_slots(conncetion_dic)
 
-    print_dic(signal_dic)
-
-    print_dic(slot_dic)
-
     g = Digraph('G', filename='connection-diagram.gv')
-    g.attr(compound='true')
+    g.attr(compound='true',size='16,11')
 
     signal_list = plot_cluster(g,signal_dic)
 
     slot_list = plot_cluster(g,slot_dic)
 
-    #print(signal_list)
-
     for signal_to_slot in signal_to_slot_list:
-        #print(signal+"->"+slot)
-        g.edge(signal_to_slot[0],signal_to_slot[1])
+        sgn = signal_to_slot[0]
+        slt = signal_to_slot[1]
+        g.edge(sgn,slt)
 
 
     g.view()
