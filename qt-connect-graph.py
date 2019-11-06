@@ -20,8 +20,8 @@ def get_source_files(path,extensions_list):
     return source_list
 
 
-def connnection_list_from_file(filename,conncetion_list):
-    conncetion_list[filename]=[]
+def connnection_list_from_file(filename,conncetion_dic):
+    conncetion_dic[filename]=[]
     with open(filename, "r") as file:
         connection = ""
         acc = False
@@ -36,9 +36,9 @@ def connnection_list_from_file(filename,conncetion_list):
                 if connection!="" and connection[:2]!="//":
                     connection = re.sub('\n', '', connection)
 
-                    conncetion_list[filename].append(connection)
+                    conncetion_dic[filename].append(connection)
                 connection = ""
-    return conncetion_list
+    return conncetion_dic
 
 def print_dic(conncetion_list):
     for f,cl in conncetion_list.items():
@@ -62,6 +62,7 @@ def unpack_signals_and_slots(conncetion_dic):
         for c in cl:
             c = c.split(',')
             if (len(c)==4):
+                
                 signal = c[1][1:].split('::')[-2:]
                 slot = c[3][1:-2].split('::')[-2:]
 
