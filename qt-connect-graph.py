@@ -5,6 +5,9 @@ from os.path import isfile, join
 
 from graphviz import Digraph
 
+def get_uppercase_letters(input):
+    return ''.join([c for c in input if c.isupper()])
+
 def get_source_files(path,extensions_list):
 
     file_list = [f for f in listdir(path) if isfile(join(path, f))]
@@ -53,6 +56,8 @@ def unpack_signals_and_slots(conncetion_dic):
     signal_dic = {}
     slot_dic = {}
 
+    signal_to_slot_list = []
+
     for f,cl in conncetion_dic.items():
         print(f)
         for c in cl:
@@ -60,10 +65,16 @@ def unpack_signals_and_slots(conncetion_dic):
             if (len(c)==4):
                 signal = c[1][1:].split('::')[-2:]
                 slot = c[3][1:-2].split('::')[-2:]
+
+                sgn = get_uppercase_letters(signal[0])+"_"+signal[1]
+                slt = get_uppercase_letters(slot[0])+"_"+slot[1]
+
+                signal_to_slot_list.append((sgn,slt))
+
                 update_node_dicionary(signal_dic,signal)
                 update_node_dicionary(slot_dic,slot)
 
-    return signal_dic, slot_dic
+    return signal_dic, slot_dic, signal_to_slot_list
 
 def plot_cluster(digraph,signal_dic):
 
@@ -96,7 +107,7 @@ if __name__ == "__main__":
         connnection_list_from_file(sf,conncetion_dic)
 
 
-    signal_dic, slot_dic = unpack_signals_and_slots(conncetion_dic)
+    signal_dic, slot_dic, signal_to_slot_list = unpack_signals_and_slots(conncetion_dic)
 
     print_dic(signal_dic)
 
@@ -109,10 +120,11 @@ if __name__ == "__main__":
 
     slot_list = plot_cluster(g,slot_dic)
 
-    print(signal_list)
+    #print(signal_list)
 
-    for signal,slot in zip(signal_list,slot_list):
-        g.edge(signal,slot)
+    for signal_to_slot in signal_to_slot_list:
+        #print(signal+"->"+slot)
+        g.edge(signal_to_slot[0],signal_to_slot[1])
 
 
     g.view()
