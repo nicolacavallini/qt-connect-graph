@@ -92,10 +92,9 @@ if __name__ == "__main__":
 
     conncetion_dic = {}
 
-    #for sf in source_files:
-    #    connnection_list_from_file(sf,conncetion_dic)
+    for sf in source_files:
+        connnection_list_from_file(sf,conncetion_dic)
 
-    connnection_list_from_file(path+"Window.cpp",conncetion_dic)
 
     signal_dic, slot_dic = unpack_signals_and_slots(conncetion_dic)
 
