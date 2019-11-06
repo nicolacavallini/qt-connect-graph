@@ -4,7 +4,7 @@ QT 5.9.1
 
 Python script to explore `c++` code, locate QT connections and plot them.
 
-It looks for `connect` keyword, using the 2nd and 4th arguments finds class and methods connected.
+It looks for `connect` keyword, using 2nd and 4th arguments finds classes and methods connected.
 
 # Depends on:
 
